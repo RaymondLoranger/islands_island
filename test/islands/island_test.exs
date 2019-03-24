@@ -29,6 +29,18 @@ defmodule Islands.IslandTest do
     {:ok, coords: coords, islands: islands}
   end
 
+  describe "An island struct" do
+    test "can be encoded by Poison", %{islands: islands} do
+      assert Poison.encode!(islands.dot) ==
+               ~s<{\"type\":\"dot\",\"hits\":[],\"coords\":[{\"row\":1,\"col\":2}]}>
+    end
+
+    test "can be encoded by Jason", %{islands: islands} do
+      assert Jason.encode!(islands.dot) ==
+               ~s<{\"coords\":[{\"col\":2,\"row\":1}],\"hits\":[],\"type\":\"dot\"}>
+    end
+  end
+
   describe "Island.new/2" do
     test "returns {:ok, ...} given valid args" do
       {:ok, coord} = Coord.new(4, 6)
@@ -51,46 +63,36 @@ defmodule Islands.IslandTest do
       coord = %{row: 3, col: 7}
       assert Island.new(:l_shape, coord) == {:error, :invalid_island_args}
     end
-
-    test "can be encoded by Poison", %{islands: islands} do
-      assert Poison.encode!(islands.dot) ==
-               ~s<{\"type\":\"dot\",\"hits\":[],\"coords\":[{\"row\":1,\"col\":2}]}>
-    end
-
-    test "can be encoded by Jason", %{islands: islands} do
-      assert Jason.encode!(islands.dot) ==
-               ~s<{\"coords\":[{\"col\":2,\"row\":1}],\"hits\":[],\"type\":\"dot\"}>
-    end
   end
 
   describe "Island.overlaps?/2" do
-    test "islands overlapping", %{islands: islands} do
+    test "asserts islands overlapping", %{islands: islands} do
       assert Island.overlaps?(islands.square, islands.dot)
     end
 
-    test "islands not overlapping", %{islands: islands} do
+    test "refutes islands overlapping", %{islands: islands} do
       refute Island.overlaps?(islands.square, islands.l_shape)
     end
   end
 
   describe "Island.guess/2" do
-    test "good guess", %{islands: islands, coords: coords} do
+    test "returns good guess", %{islands: islands, coords: coords} do
       assert {:hit, %Island{type: :dot}} = Island.guess(islands.dot, coords.dot)
     end
 
-    test "bad guess", %{islands: islands} do
+    test "returns bad guess", %{islands: islands} do
       {:ok, coord} = Coord.new(3, 4)
       assert Island.guess(islands.dot, coord) == :miss
     end
   end
 
   describe "Island.forested?/1" do
-    test "island forested", %{islands: islands, coords: coords} do
+    test "asserts island forested", %{islands: islands, coords: coords} do
       {:hit, dot} = Island.guess(islands.dot, coords.dot)
       assert Island.forested?(dot)
     end
 
-    test "island not forested", %{islands: islands} do
+    test "refutes island forested", %{islands: islands} do
       {:ok, coord} = Coord.new(3, 4)
       assert Island.guess(islands.dot, coord) == :miss
       refute Island.forested?(islands.dot)

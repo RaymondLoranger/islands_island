@@ -76,11 +76,11 @@ defmodule Islands.IslandTest do
   end
 
   describe "Island.guess/2" do
-    test "returns good guess", %{islands: islands, coords: coords} do
+    test "detects a hit guess", %{islands: islands, coords: coords} do
       assert {:hit, %Island{type: :dot}} = Island.guess(islands.dot, coords.dot)
     end
 
-    test "returns bad guess", %{islands: islands} do
+    test "detect a miss guess", %{islands: islands} do
       {:ok, coord} = Coord.new(3, 4)
       assert Island.guess(islands.dot, coord) == :miss
     end

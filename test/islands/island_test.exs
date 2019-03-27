@@ -26,18 +26,33 @@ defmodule Islands.IslandTest do
       l_shape: l_shape
     }
 
-    {:ok, coords: coords, islands: islands}
+    poison =
+      ~s<{\"type\":\"dot\",\"hits\":[],\"coords\":[{\"row\":1,\"col\":2}]}>
+
+    jason =
+      ~s<{\"coords\":[{\"col\":2,\"row\":1}],\"hits\":[],\"type\":\"dot\"}>
+
+    decoded = %{
+      "coords" => [%{"col" => 2, "row" => 1}],
+      "hits" => [],
+      "type" => "dot"
+    }
+
+    {:ok,
+     json: %{poison: poison, jason: jason, decoded: decoded},
+     islands: islands,
+     coords: coords}
   end
 
   describe "An island struct" do
-    test "can be encoded by Poison", %{islands: islands} do
-      assert Poison.encode!(islands.dot) ==
-               ~s<{\"type\":\"dot\",\"hits\":[],\"coords\":[{\"row\":1,\"col\":2}]}>
+    test "can be encoded/decoded by Poison", %{islands: islands, json: json} do
+      assert Poison.encode!(islands.dot) == json.poison
+      assert Poison.decode!(json.poison) == json.decoded
     end
 
-    test "can be encoded by Jason", %{islands: islands} do
-      assert Jason.encode!(islands.dot) ==
-               ~s<{\"coords\":[{\"col\":2,\"row\":1}],\"hits\":[],\"type\":\"dot\"}>
+    test "can be encoded/decoded by Jason", %{islands: islands, json: json} do
+      assert Jason.encode!(islands.dot) == json.jason
+      assert Jason.decode!(json.jason) == json.decoded
     end
   end
 

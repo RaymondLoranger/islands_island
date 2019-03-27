@@ -45,12 +45,12 @@ defmodule Islands.IslandTest do
   end
 
   describe "An island struct" do
-    test "can be encoded/decoded by Poison", %{islands: islands, json: json} do
+    test "can be encoded by Poison", %{islands: islands, json: json} do
       assert Poison.encode!(islands.dot) == json.poison
       assert Poison.decode!(json.poison) == json.decoded
     end
 
-    test "can be encoded/decoded by Jason", %{islands: islands, json: json} do
+    test "can be encoded by Jason", %{islands: islands, json: json} do
       assert Jason.encode!(islands.dot) == json.jason
       assert Jason.decode!(json.jason) == json.decoded
     end

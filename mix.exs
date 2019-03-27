@@ -4,7 +4,7 @@ defmodule Islands.Island.MixProject do
   def project do
     [
       app: :islands_island,
-      version: "0.1.0",
+      version: "0.1.1",
       elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
       name: "Islands Island",
@@ -49,7 +49,7 @@ defmodule Islands.Island.MixProject do
       {:poison, "~> 3.0"},
       {:jason, "~> 1.0"},
       {:persist_config, "~> 0.1"},
-      {:islands_coord, path: "../islands_coord"},
+      {:islands_coord, "~> 0.1"},
       {:earmark, "~> 1.0", only: :dev},
       {:ex_doc, "~> 0.14", only: :dev, runtime: false},
       {:dialyxir, "~> 0.5", only: :dev, runtime: false}

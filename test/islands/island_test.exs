@@ -80,7 +80,7 @@ defmodule Islands.IslandTest do
       assert {:hit, %Island{type: :dot}} = Island.guess(islands.dot, coords.dot)
     end
 
-    test "detect a miss guess", %{islands: islands} do
+    test "detects a miss guess", %{islands: islands} do
       {:ok, coord} = Coord.new(3, 4)
       assert Island.guess(islands.dot, coord) == :miss
     end

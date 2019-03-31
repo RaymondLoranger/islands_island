@@ -56,7 +56,7 @@ defmodule Islands.Island do
 
   defimpl Jason.Encoder, for: MapSet do
     def encode(struct, opts) do
-      Jason.Encode.list(Enum.to_list(struct), opts)
+      struct |> Enum.to_list() |> Jason.Encode.list(opts)
     end
   end
 

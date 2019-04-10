@@ -7,13 +7,15 @@ defmodule Islands.Island do
   @book_ref Application.get_env(@app, :book_ref)
 
   @moduledoc """
-  Models an `island` for the _Game of Islands_.
+  Models an `island` in the _Game of Islands_.
   \n##### #{@book_ref}
   """
 
   alias __MODULE__
   alias __MODULE__.Offsets
   alias Islands.Coord
+
+  @types [:atoll, :dot, :l_shape, :s_shape, :square]
 
   @derive [Poison.Encoder]
   @derive Jason.Encoder
@@ -23,8 +25,6 @@ defmodule Islands.Island do
   @type coords :: MapSet.t(Coord.t())
   @type t :: %Island{type: type, coords: coords, hits: coords}
   @type type :: :atoll | :dot | :l_shape | :s_shape | :square
-
-  @types Application.get_env(@app, :island_types)
 
   @spec new(type, Coord.t()) :: {:ok, t} | {:error, atom}
   def new(type, %Coord{} = origin) when type in @types do

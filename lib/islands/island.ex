@@ -38,8 +38,8 @@ defmodule Islands.Island do
   def new(_type, _origin), do: {:error, :invalid_island_args}
 
   @spec overlaps?(t, t) :: boolean
-  def overlaps?(%Island{} = island, %Island{} = new_island) do
-    not MapSet.disjoint?(island.coords, new_island.coords)
+  def overlaps?(%Island{} = new_island, %Island{} = island) do
+    not MapSet.disjoint?(new_island.coords, island.coords)
   end
 
   @spec guess(t, Coord.t()) :: {:hit, t} | :miss

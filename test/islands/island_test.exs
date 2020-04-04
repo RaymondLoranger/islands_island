@@ -27,15 +27,16 @@ defmodule Islands.IslandTest do
     }
 
     poison =
-      ~s<{\"type\":\"dot\",\"hits\":[],\"coords\":[{\"row\":1,\"col\":2}]}>
+      ~s<{"type":"dot","origin":{"row":1,"col":2},"hits":[],"coords":[{"row":1,"col":2}]}>
 
     jason =
-      ~s<{\"coords\":[{\"col\":2,\"row\":1}],\"hits\":[],\"type\":\"dot\"}>
+      ~s<{"coords":[{"col":2,"row":1}],"hits":[],"origin":{"col":2,"row":1},"type":"dot"}>
 
     decoded = %{
       "coords" => [%{"col" => 2, "row" => 1}],
       "hits" => [],
-      "type" => "dot"
+      "type" => "dot",
+      "origin" => %{"col" => 2, "row" => 1}
     }
 
     {:ok,

@@ -5,7 +5,9 @@ defmodule Islands.Island.Offsets do
 
   alias Islands.Island
 
-  @type t :: [{0..2, 0..2}]
+  @type col_offset :: 0..2
+  @type row_offset :: 0..2
+  @type t :: [{row_offset, col_offset}]
 
   @doc """
   Returns a list of offsets for a given island type.

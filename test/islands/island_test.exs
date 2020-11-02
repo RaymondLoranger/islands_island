@@ -39,10 +39,11 @@ defmodule Islands.IslandTest do
       "origin" => %{"col" => 2, "row" => 1}
     }
 
-    {:ok,
-     json: %{poison: poison, jason: jason, decoded: decoded},
-     islands: islands,
-     coords: coords}
+    %{
+      json: %{poison: poison, jason: jason, decoded: decoded},
+      islands: islands,
+      coords: coords
+    }
   end
 
   describe "An island struct" do

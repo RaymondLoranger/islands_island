@@ -30,7 +30,7 @@ defmodule Islands.Island do
 
   @spec new(type, Coord.t()) :: {:ok, t} | {:error, atom}
   def new(type, %Coord{} = origin) when type in @types do
-    with [_ | _] = coords <- type |> Offsets.new() |> coords(origin) do
+    with [_ | _] = coords <- Offsets.new(type) |> coords(origin) do
       {:ok,
        %Island{
          type: type,
@@ -90,7 +90,7 @@ defmodule Islands.Island do
 
   defimpl Jason.Encoder, for: MapSet do
     def encode(struct, opts) do
-      struct |> Enum.to_list() |> Jason.Encode.list(opts)
+      Enum.to_list(struct) |> Jason.Encode.list(opts)
     end
   end
 

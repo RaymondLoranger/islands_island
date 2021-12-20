@@ -8,7 +8,6 @@ defmodule Islands.Island do
   The `island` struct contains the fields type, origin, coords and hits
   representing the characteristics of an island in the _Game of Islands_.
 
-
   ##### Based on the book [Functional Web Development](https://pragprog.com/book/lhelph/functional-web-development-with-elixir-otp-and-phoenix) by Lance Halvorsen.
   """
 

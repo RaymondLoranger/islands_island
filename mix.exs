@@ -4,7 +4,7 @@ defmodule Islands.Island.MixProject do
   def project do
     [
       app: :islands_island,
-      version: "0.1.19",
+      version: "0.1.20",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       name: "Islands Island",
@@ -21,7 +21,7 @@ defmodule Islands.Island.MixProject do
 
   defp description do
     """
-    Models an island in the Game of Islands.
+    An island struct and functions for the Game of Islands.
     """
   end
 
@@ -48,7 +48,7 @@ defmodule Islands.Island.MixProject do
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
       {:islands_coord, "~> 0.1"},
       {:jason, "~> 1.0"},
-      {:poison, "~> 4.0"}
+      {:poison, "~> 5.0"}
     ]
   end
 end

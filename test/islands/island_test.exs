@@ -6,18 +6,18 @@ defmodule Islands.IslandTest do
   doctest Island
 
   setup_all do
-    {:ok, square_coord} = Coord.new(1, 1)
-    {:ok, dot_coord} = Coord.new(1, 2)
-    {:ok, l_shape_coord} = Coord.new(6, 6)
+    {:ok, square_origin} = Coord.new(1, 1)
+    {:ok, dot_origin} = Coord.new(1, 2)
+    {:ok, l_shape_origin} = Coord.new(6, 6)
 
-    {:ok, square} = Island.new(:square, square_coord)
-    {:ok, dot} = Island.new(:dot, dot_coord)
-    {:ok, l_shape} = Island.new(:l_shape, l_shape_coord)
+    {:ok, square} = Island.new(:square, square_origin)
+    {:ok, dot} = Island.new(:dot, dot_origin)
+    {:ok, l_shape} = Island.new(:l_shape, l_shape_origin)
 
-    coords = %{
-      square: square_coord,
-      dot: dot_coord,
-      l_shape: l_shape_coord
+    origins = %{
+      square: square_origin,
+      dot: dot_origin,
+      l_shape: l_shape_origin
     }
 
     islands = %{
@@ -42,7 +42,7 @@ defmodule Islands.IslandTest do
     %{
       json: %{poison: poison, jason: jason, decoded: decoded},
       islands: islands,
-      coords: coords
+      origins: origins
     }
   end
 
@@ -59,26 +59,35 @@ defmodule Islands.IslandTest do
   end
 
   describe "Island.new/2" do
-    test "returns {:ok, ...} given valid args" do
-      {:ok, coord} = Coord.new(4, 6)
+    test "returns {:ok, island} given valid args" do
+      {:ok, origin} = Coord.new(4, 6)
+      {:ok, island} = Island.new(:l_shape, origin)
+      %Island{type: type, origin: ^origin, coords: coords, hits: hits} = island
+      assert type == :l_shape
+      assert hits == MapSet.new()
 
-      assert {:ok, %Island{type: :l_shape, coords: _coords, hits: _hits}} =
-               Island.new(:l_shape, coord)
+      assert coords ==
+               MapSet.new([
+                 Coord.new!(4, 6),
+                 Coord.new!(5, 6),
+                 Coord.new!(6, 6),
+                 Coord.new!(6, 7)
+               ])
     end
 
-    test "returns {:error, ...} given invalid island type" do
-      {:ok, coord} = Coord.new(9, 3)
-      assert Island.new(:wrong, coord) == {:error, :invalid_island_args}
+    test "returns {:error, reason} given invalid island type" do
+      {:ok, origin} = Coord.new(9, 3)
+      assert Island.new(:wrong, origin) == {:error, :invalid_island_args}
     end
 
-    test "returns {:error, ...} given invalid origin location" do
-      {:ok, coord} = Coord.new(10, 10)
-      assert Island.new(:l_shape, coord) == {:error, :invalid_island_location}
+    test "returns {:error, reason} given invalid origin location" do
+      {:ok, origin} = Coord.new(10, 10)
+      assert Island.new(:l_shape, origin) == {:error, :invalid_island_location}
     end
 
-    test "returns {:error, ...} given invalid origin type" do
-      coord = %{row: 3, col: 7}
-      assert Island.new(:l_shape, coord) == {:error, :invalid_island_args}
+    test "returns {:error, reason} given invalid origin type" do
+      origin = %{row: 3, col: 7}
+      assert Island.new(:l_shape, origin) == {:error, :invalid_island_args}
     end
   end
 
@@ -93,25 +102,26 @@ defmodule Islands.IslandTest do
   end
 
   describe "Island.guess/2" do
-    test "detects a hit guess", %{islands: islands, coords: coords} do
-      assert {:hit, %Island{type: :dot}} = Island.guess(islands.dot, coords.dot)
+    test "detects a hit guess", %{islands: islands, origins: origins} do
+      assert {:hit, %Island{type: :dot}} =
+               Island.guess(islands.dot, origins.dot)
     end
 
     test "detects a miss guess", %{islands: islands} do
-      {:ok, coord} = Coord.new(3, 4)
-      assert Island.guess(islands.dot, coord) == :miss
+      {:ok, origin} = Coord.new(3, 4)
+      assert Island.guess(islands.dot, origin) == :miss
     end
   end
 
   describe "Island.forested?/1" do
-    test "asserts island forested", %{islands: islands, coords: coords} do
-      {:hit, dot} = Island.guess(islands.dot, coords.dot)
+    test "asserts island forested", %{islands: islands, origins: origins} do
+      {:hit, dot} = Island.guess(islands.dot, origins.dot)
       assert Island.forested?(dot)
     end
 
     test "refutes island forested", %{islands: islands} do
-      {:ok, coord} = Coord.new(3, 4)
-      assert Island.guess(islands.dot, coord) == :miss
+      {:ok, origin} = Coord.new(3, 4)
+      assert Island.guess(islands.dot, origin) == :miss
       refute Island.forested?(islands.dot)
     end
   end

@@ -24,9 +24,9 @@ defmodule Islands.Island do
 
   @typedoc "A set of squares"
   @type coords :: MapSet.t(Coord.t())
-  @typedoc "Grid cell"
-  # Size of bitstring is 16 bits and each unit is 8 bits => 2 bytes!
-  @type grid_cell :: <<_::16, _::_*8>>
+  @typedoc ~s|Grid cell e.g. "a1" or "c3"|
+  # Size of bitstring is 16 bits => 2 bytes!
+  @type grid_cell :: <<_::16>>
   @typedoc "A map representing a CSS grid position"
   @type grid_position :: %{
           gridColumnStart: Coord.col(),

@@ -24,6 +24,13 @@ defmodule Islands.Island do
 
   @typedoc "A set of squares"
   @type coords :: MapSet.t(Coord.t())
+  @typedoc "Grid cell"
+  @type grid_cell :: <<_::2, _::_*8>>
+  @typedoc "A map representing a CSS grid position"
+  @type grid_position :: %{
+          gridColumnStart: Coord.col(),
+          gridRowStart: Coord.row()
+        }
   @type t :: %Island{
           type: type,
           origin: Coord.t(),
@@ -143,7 +150,7 @@ defmodule Islands.Island do
       iex> Island.grid_position(atoll)
       %{gridRowStart: 2, gridColumnStart: 3}
   """
-  @spec grid_position(t) :: map
+  @spec grid_position(t) :: grid_position
   def grid_position(%Island{origin: %Coord{row: row, col: col}} = _island) do
     %{gridColumnStart: col, gridRowStart: row}
   end
@@ -165,7 +172,7 @@ defmodule Islands.Island do
       iex> Island.hit_cells(atoll) |> Enum.sort()
       ["a1", "a3", "b1"]
   """
-  @spec hit_cells(t) :: [<<_::2, _::_*8>>]
+  @spec hit_cells(t) :: [grid_cell]
   def hit_cells(%Island{origin: origin, hits: hits} = _island) do
     # <<?a, ?1>> is "a1", <<?a + 1, ?1 + 2>> is "b3", etc.
     Enum.map(hits, &<<?a + &1.col - origin.col, ?1 + &1.row - origin.row>>)

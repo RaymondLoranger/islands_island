@@ -86,7 +86,7 @@ defmodule Islands.Island do
       iex> Island.new!(:square, origin)
       ** (ArgumentError) cannot create island, reason: :invalid_island_location
 
-      iex> alias Islands.{Coord, Island}
+      iex> alias Islands.Island
       iex> origin = %{row: 10, col: 9}
       iex> Island.new!(:square, origin)
       ** (ArgumentError) cannot create island, reason: :invalid_island_args

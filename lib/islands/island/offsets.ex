@@ -13,7 +13,7 @@ defmodule Islands.Island.Offsets do
   @type t :: [{row_offset, col_offset}]
 
   @doc """
-  Returns a list of offset tuples for a given `island type`.
+  Returns a list of offset tuples for the given `island_type`.
   """
   @spec new(Island.type()) :: t | {:error, atom}
   def new(island_type)

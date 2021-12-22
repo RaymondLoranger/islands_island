@@ -1,16 +1,19 @@
 defmodule Islands.Island.Offsets do
   @moduledoc """
-  Returns a list of offsets for each island type.
+  Returns a list of offset tuples for each island type.
   """
 
   alias Islands.Island
 
+  @typedoc "Column offset"
   @type col_offset :: 0..2
+  @typedoc "Row offset"
   @type row_offset :: 0..2
+  @typedoc "List of offset tuples"
   @type t :: [{row_offset, col_offset}]
 
   @doc """
-  Returns a list of offsets for a given island type.
+  Returns a list of offset tuples for a given `island type`.
   """
   @spec new(Island.type()) :: t | {:error, atom}
   def new(island_type)

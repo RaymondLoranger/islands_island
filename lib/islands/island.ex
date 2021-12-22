@@ -2,10 +2,13 @@
 # │ Based on the book "Functional Web Development" by Lance Halvorsen. │
 # └────────────────────────────────────────────────────────────────────┘
 defmodule Islands.Island do
-  @moduledoc """
-  An `island` struct and functions for the _Game of Islands_.
+  @island "[`island`](`t:Islands.Island.t/0`)"
+  @readme "https://github.com/RaymondLoranger/islands_vue_client#readme"
 
-  The `island` struct contains the fields type, origin, coords and hits
+  @moduledoc """
+  An #{@island} struct and functions for the [Game of Islands](#{@readme}).
+
+  The #{@island} struct contains the fields type, origin, coords and hits
   representing the characteristics of an island in the _Game of Islands_.
 
   ##### Based on the book [Functional Web Development](https://pragprog.com/book/lhelph/functional-web-development-with-elixir-otp-and-phoenix) by Lance Halvorsen.
@@ -32,38 +35,34 @@ defmodule Islands.Island do
           gridColumnStart: Coord.col(),
           gridRowStart: Coord.row()
         }
+  @typedoc "An island struct for the Game of Islands"
   @type t :: %Island{
           type: type,
           origin: Coord.t(),
           coords: coords,
           hits: coords
         }
-  @typedoc "Island type"
+  @typedoc "Island types"
   @type type :: :atoll | :dot | :l_shape | :s_shape | :square
 
   @doc """
-  Returns `{:ok, island}` or `{:error, reason}`
-  if given an invalid `type` or `origin`.
+  Returns `{:ok, island}` or `{:error, reason}` if given an invalid `type` or
+  `origin`.
 
   ## Examples
 
       iex> alias Islands.{Coord, Island}
-      iex> origin = Coord.new!(1, 1)
+      iex> {:ok, origin} = Coord.new(1, 1)
       iex> {:ok, island} = Island.new(:dot, origin)
       iex> %Island{origin: ^origin, coords: coords, hits: hits} = island
-      iex> coords == MapSet.new([origin]) and hits == MapSet.new()
-      true
+      iex> {coords, hits}
+      {MapSet.new([origin]), MapSet.new()}
   """
   @spec new(type, Coord.t()) :: {:ok, t} | {:error, atom}
   def new(type, %Coord{} = origin) when type in @types do
     with [_ | _] = coords <- Offsets.new(type) |> coords(origin) do
-      {:ok,
-       %Island{
-         type: type,
-         origin: origin,
-         coords: MapSet.new(coords),
-         hits: MapSet.new()
-       }}
+      {coords, hits} = {MapSet.new(coords), MapSet.new()}
+      {:ok, %Island{type: type, origin: origin, coords: coords, hits: hits}}
     else
       :error -> {:error, :invalid_island_location}
     end
@@ -72,15 +71,15 @@ defmodule Islands.Island do
   def new(_type, _origin), do: {:error, :invalid_island_args}
 
   @doc """
-  Returns an `island` struct or raises if given an invalid `type` or `origin`.
+  Returns an #{@island} struct or raises if given an invalid `type` or `origin`.
 
   ## Examples
 
       iex> alias Islands.{Coord, Island}
       iex> origin = Coord.new!(1, 1)
       iex> %Island{coords: coords, hits: hits} = Island.new!(:dot, origin)
-      iex> coords == MapSet.new([origin]) and hits == MapSet.new()
-      true
+      iex> {coords, hits}
+      {MapSet.new([origin]), MapSet.new()}
 
       iex> alias Islands.{Coord, Island}
       iex> origin = Coord.new!(10, 9)
@@ -133,7 +132,7 @@ defmodule Islands.Island do
   end
 
   @doc """
-  Checks if all the squares of an `island` have been hit.
+  Checks if all the squares of `island` have been hit.
   """
   @spec forested?(t) :: boolean
   def forested?(%Island{} = island) do

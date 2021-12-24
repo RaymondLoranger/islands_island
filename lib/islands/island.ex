@@ -2,13 +2,10 @@
 # │ Based on the book "Functional Web Development" by Lance Halvorsen. │
 # └────────────────────────────────────────────────────────────────────┘
 defmodule Islands.Island do
-  @island "[`island`](`t:Islands.Island.t/0`)"
-  @readme "https://github.com/RaymondLoranger/islands_vue_client#readme"
-
   @moduledoc """
-  An #{@island} struct and functions for the [Game of Islands](#{@readme}).
+  An island struct and functions for the _Game of Islands_.
 
-  The #{@island} struct contains the fields type, origin, coords and hits
+  The island struct contains the fields `type`, `origin`, `coords` and `hits`
   representing the characteristics of an island in the _Game of Islands_.
 
   ##### Based on the book [Functional Web Development](https://pragprog.com/book/lhelph/functional-web-development-with-elixir-otp-and-phoenix) by Lance Halvorsen.
@@ -42,7 +39,7 @@ defmodule Islands.Island do
           coords: coords,
           hits: coords
         }
-  @typedoc "Island types"
+  @typedoc "Island type"
   @type type :: :atoll | :dot | :l_shape | :s_shape | :square
 
   @doc """
@@ -71,7 +68,7 @@ defmodule Islands.Island do
   def new(_type, _origin), do: {:error, :invalid_island_args}
 
   @doc """
-  Returns an #{@island} struct or raises if given an invalid `type` or `origin`.
+  Returns an island struct or raises if given an invalid `type` or `origin`.
 
   ## Examples
 

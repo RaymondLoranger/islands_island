@@ -9,7 +9,7 @@ defmodule Islands.Island.Offsets do
   @type col_offset :: 0..2
   @typedoc "Row offset"
   @type row_offset :: 0..2
-  @typedoc "List of offset tuples"
+  @typedoc "A list of offset tuples"
   @type t :: [{row_offset, col_offset}]
 
   @doc """

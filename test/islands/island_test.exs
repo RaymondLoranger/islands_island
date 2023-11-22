@@ -26,9 +26,6 @@ defmodule Islands.IslandTest do
       l_shape: l_shape
     }
 
-    poison =
-      ~s<{"hits":[],"coords":[{"col":2,"row":1}],"origin":{"col":2,"row":1},"type":"dot"}>
-
     jason =
       ~s<{"type":"dot","origin":{"row":1,"col":2},"coords":[{"row":1,"col":2}],"hits":[]}>
 
@@ -40,18 +37,13 @@ defmodule Islands.IslandTest do
     }
 
     %{
-      json: %{poison: poison, jason: jason, decoded: decoded},
+      json: %{jason: jason, decoded: decoded},
       islands: islands,
       origins: origins
     }
   end
 
   describe "An island struct" do
-    test "can be encoded by Poison", %{islands: islands, json: json} do
-      assert Poison.encode!(islands.dot) == json.poison
-      assert Poison.decode!(json.poison) == json.decoded
-    end
-
     test "can be encoded by Jason", %{islands: islands, json: json} do
       assert Jason.encode!(islands.dot) == json.jason
       assert Jason.decode!(json.jason) == json.decoded

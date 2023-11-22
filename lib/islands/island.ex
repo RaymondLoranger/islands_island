@@ -17,7 +17,6 @@ defmodule Islands.Island do
 
   @types [:atoll, :dot, :l_shape, :s_shape, :square]
 
-  @derive [Poison.Encoder]
   @derive Jason.Encoder
   @enforce_keys [:type, :origin, :coords, :hits]
   defstruct [:type, :origin, :coords, :hits]

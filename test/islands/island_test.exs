@@ -100,8 +100,8 @@ defmodule Islands.IslandTest do
     end
 
     test "detects a miss guess", %{islands: islands} do
-      {:ok, origin} = Coord.new(3, 4)
-      assert Island.guess(islands.dot, origin) == :miss
+      {:ok, miss} = Coord.new(3, 4)
+      assert Island.guess(islands.dot, miss) == :miss
     end
   end
 
@@ -112,8 +112,8 @@ defmodule Islands.IslandTest do
     end
 
     test "refutes island forested", %{islands: islands} do
-      {:ok, origin} = Coord.new(3, 4)
-      assert Island.guess(islands.dot, origin) == :miss
+      {:ok, miss} = Coord.new(3, 4)
+      assert Island.guess(islands.dot, miss) == :miss
       refute Island.forested?(islands.dot)
     end
   end

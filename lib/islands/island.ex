@@ -192,7 +192,7 @@ defmodule Islands.Island do
   # [91, ["{\"row\":", "1", ",\"col\":", "2", 125], 93]
   # IO.iodata_to_binary ==> ~s<[{"row":1,"col":2}]>
   defimpl JSON.Encoder, for: MapSet do
-    @spec encode(%MapSet{}, JSON.Encoder.t()) :: iodata
+    @spec encode(%MapSet{}, JSON.encoder()) :: iodata
     def encode(%MapSet{} = set, encoder) when is_function(encoder, 2) do
       Enum.to_list(set) |> JSON.Encoder.encode(encoder)
     end

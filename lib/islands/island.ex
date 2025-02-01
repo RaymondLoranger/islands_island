@@ -6,7 +6,7 @@ defmodule Islands.Island do
   An island struct and functions for the _Game of Islands_.
 
   The island struct contains the fields `type`, `origin`, `coords` and `hits`
-  representing the characteristics of an island in the _Game of Islands_.
+  representing the properties of an island in the _Game of Islands_.
 
   ##### Based on the book [Functional Web Development](https://pragprog.com/titles/lhelph/functional-web-development-with-elixir-otp-and-phoenix/) by Lance Halvorsen.
   """
@@ -17,7 +17,7 @@ defmodule Islands.Island do
 
   @types [:atoll, :dot, :l_shape, :s_shape, :square]
 
-  @derive Jason.Encoder
+  @derive JSON.Encoder
   @enforce_keys [:type, :origin, :coords, :hits]
   defstruct [:type, :origin, :coords, :hits]
 
@@ -188,10 +188,13 @@ defmodule Islands.Island do
 
   ## Helpers
 
-  defimpl Jason.Encoder, for: MapSet do
-    @spec encode(%MapSet{}, Jason.Encode.opts()) :: iodata
-    def encode(%MapSet{} = set, opts) do
-      Enum.to_list(set) |> Jason.Encode.list(opts)
+  # MapSet.new([%Islands.Coord{row: 1, col: 2}]) ->
+  # [91, ["{\"row\":", "1", ",\"col\":", "2", 125], 93]
+  # IO.iodata_to_binary ==> ~s<[{"row":1,"col":2}]>
+  defimpl JSON.Encoder, for: MapSet do
+    @spec encode(%MapSet{}, JSON.Encoder.t()) :: iodata
+    def encode(%MapSet{} = set, encoder) when is_function(encoder, 2) do
+      Enum.to_list(set) |> JSON.Encoder.encode(encoder)
     end
   end
 end

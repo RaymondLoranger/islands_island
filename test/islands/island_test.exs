@@ -26,7 +26,7 @@ defmodule Islands.IslandTest do
       l_shape: l_shape
     }
 
-    jason =
+    encoded =
       ~s<{"type":"dot","origin":{"row":1,"col":2},"coords":[{"row":1,"col":2}],"hits":[]}>
 
     decoded = %{
@@ -37,16 +37,16 @@ defmodule Islands.IslandTest do
     }
 
     %{
-      json: %{jason: jason, decoded: decoded},
+      json: %{encoded: encoded, decoded: decoded},
       islands: islands,
       origins: origins
     }
   end
 
   describe "An island struct" do
-    test "can be encoded by Jason", %{islands: islands, json: json} do
-      assert Jason.encode!(islands.dot) == json.jason
-      assert Jason.decode!(json.jason) == json.decoded
+    test "can be encoded by JSON", %{islands: islands, json: json} do
+      assert JSON.encode!(islands.dot) == json.encoded
+      assert JSON.decode!(json.encoded) == json.decoded
     end
   end
 

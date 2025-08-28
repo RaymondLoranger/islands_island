@@ -5,7 +5,13 @@ defmodule Islands.Island do
   @moduledoc """
   An island struct and functions for the _Game of Islands_.
 
-  The island struct contains the fields `type`, `origin`, `coords` and `hits`
+  The island struct contains the fields:
+
+    - `type`
+    - `origin`
+    - `coords`
+    - `hits`
+
   representing the properties of an island in the _Game of Islands_.
 
   ##### Based on the book [Functional Web Development](https://pragprog.com/titles/lhelph/functional-web-development-with-elixir-otp-and-phoenix/) by Lance Halvorsen.

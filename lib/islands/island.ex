@@ -59,6 +59,16 @@ defmodule Islands.Island do
       iex> %Island{origin: ^origin, coords: coords, hits: hits} = island
       iex> {coords, hits}
       {MapSet.new([origin]), MapSet.new()}
+
+      iex> alias Islands.{Coord, Island}
+      iex> {:ok, origin} = Coord.new(10, 9)
+      iex> Island.new(:square, origin)
+      {:error, :invalid_island_location}
+
+      iex> alias Islands.{Coord, Island}
+      iex> {:ok, origin} = Coord.new(1, 1)
+      iex> Island.new(DOT, origin)
+      iex> {:error, :invalid_island_args}
   """
   @spec new(type, Coord.t()) :: {:ok, t} | {:error, atom}
   def new(type, %Coord{} = origin) when type in @types do
@@ -116,6 +126,14 @@ defmodule Islands.Island do
       iex> atoll = Island.new!(:atoll, atoll_origin)
       iex> Island.overlaps?(atoll, square)
       true
+
+      iex> alias Islands.{Coord, Island}
+      iex> square_origin = Coord.new!(1, 1)
+      iex> atoll_origin = Coord.new!(3, 3)
+      iex> square = Island.new!(:square, square_origin)
+      iex> atoll = Island.new!(:atoll, atoll_origin)
+      iex> Island.overlaps?(atoll, square)
+      false
   """
   @spec overlaps?(t, t) :: boolean
   def overlaps?(%Island{} = new_island, %Island{} = island) do
@@ -125,6 +143,21 @@ defmodule Islands.Island do
   @doc """
   Returns `{:hit, updated_island}`, where updated_island is `island`
   consequently updated if `guess` was a hit, or `:miss` otherwise.
+
+  ## Examples
+
+      iex> alias Islands.{Coord, Island}
+      iex> square_origin = Coord.new!(1, 1)
+      iex> square = Island.new!(:square, square_origin)
+      iex> {:hit, updated_square} = Island.guess(square, square_origin)
+      iex> updated_square.hits
+      MapSet.new([square_origin])
+
+      iex> alias Islands.{Coord, Island}
+      iex> s_shape_origin = Coord.new!(1, 1)
+      iex> s_shape = Island.new!(:s_shape, s_shape_origin)
+      iex> Island.guess(s_shape, s_shape_origin)
+      :miss
   """
   @spec guess(t, Coord.t()) :: {:hit, t} | :miss
   def guess(%Island{} = island, %Coord{} = guess) do
@@ -135,6 +168,15 @@ defmodule Islands.Island do
 
   @doc """
   Checks if all the squares of `island` have been hit.
+
+  ## Examples
+
+      iex> alias Islands.{Coord, Island}
+      iex> dot_origin = Coord.new!(1, 1)
+      iex> dot = Island.new!(:dot, dot_origin)
+      iex> {:hit, updated_dot} = Island.guess(dot, dot_origin)
+      iex> {Island.forested?(dot), Island.forested?(updated_dot)}
+      {false, true}
   """
   @spec forested?(t) :: boolean
   def forested?(%Island{} = island) do
@@ -182,6 +224,7 @@ defmodule Islands.Island do
 
   ## Private functions
 
+  # Returns the coordinates of a validly located island or `:error`.
   @spec coords(Offsets.t(), Coord.t()) :: [Coord.t()] | :error
   defp coords(offsets, %Coord{row: row, col: col} = _origin) do
     Enum.reduce_while(offsets, [], fn {row_offset, col_offset}, coords ->
@@ -197,6 +240,7 @@ defmodule Islands.Island do
   # MapSet.new([%Islands.Coord{row: 1, col: 2}]) ->
   # [91, ["{\"row\":", "1", ",\"col\":", "2", 125], 93]
   # IO.iodata_to_binary ==> ~s<[{"row":1,"col":2}]>
+  # [91, 123, 125, 93] => ~c"[{}]"
   defimpl JSON.Encoder, for: MapSet do
     @spec encode(%MapSet{}, JSON.encoder()) :: iodata
     def encode(%MapSet{} = set, encoder) when is_function(encoder, 2) do

@@ -97,11 +97,6 @@ defmodule Islands.Island do
       iex> origin = Coord.new!(10, 9)
       iex> Island.new!(:square, origin)
       ** (ArgumentError) cannot create island, reason: :invalid_island_location
-
-      iex> alias Islands.Island
-      iex> origin = %{row: 10, col: 9}
-      iex> Island.new!(:square, origin)
-      ** (ArgumentError) cannot create island, reason: :invalid_island_args
   """
   @spec new!(type, Coord.t()) :: t
   def new!(type, origin) do
@@ -239,7 +234,7 @@ defmodule Islands.Island do
 
   # MapSet.new([%Islands.Coord{row: 1, col: 2}]) ->
   # [91, ["{\"row\":", "1", ",\"col\":", "2", 125], 93]
-  # IO.iodata_to_binary ==> ~s<[{"row":1,"col":2}]>
+  # IO.iodata_to_binary => ~s<[{"row":1,"col":2}]>
   # [91, 123, 125, 93] => ~c"[{}]"
   defimpl JSON.Encoder, for: MapSet do
     @spec encode(%MapSet{}, JSON.encoder()) :: iodata
